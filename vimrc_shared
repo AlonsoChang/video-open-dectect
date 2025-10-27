@@ -1,0 +1,100 @@
+" 啟用語法高亮與自動偵測檔案類型
+syntax on
+filetype on
+filetype plugin indent on
+
+" 啟用真色彩（需終端支援，如 iTerm2、Windows Terminal、VSCode Terminal 等）
+set termguicolors
+set background=dark
+
+" 移除現有配色干擾
+syntax reset
+
+" ======= 自訂色彩主題：黑底清爽版 =======
+" 註解（你指定的主色）
+highlight Comment         guifg=#8BE6FF ctermfg=81
+
+" 字串：柔和淺綠
+highlight String          guifg=#A8FF60 ctermfg=120
+
+" 關鍵字（if, for, return...）
+highlight Keyword         guifg=#FF6EC7 ctermfg=213 gui=bold
+
+" 函式名稱
+highlight Function        guifg=#FFD75F ctermfg=221 gui=bold
+
+" 常數（True, None, 數字, 常量）
+highlight Constant        guifg=#FFAA33 ctermfg=214
+
+" 型別名稱 / 類別
+highlight Type            guifg=#5FD7FF ctermfg=81 gui=bold
+
+" 變數 / 標識符號
+highlight Identifier      guifg=#FFFFFF ctermfg=15
+
+" 運算符（=, +, -, *...）
+highlight Operator        guifg=#FFDF87 ctermfg=228
+
+" 錯誤訊息（紅）
+highlight Error           guifg=#FFFFFF guibg=#FF005F ctermfg=15 ctermbg=197
+
+" 狀態列與游標行
+highlight StatusLine      guifg=#FFFFFF guibg=#005F5F ctermfg=15 ctermbg=23
+highlight CursorLine      guibg=#1A1A1A ctermbg=234
+highlight CursorLineNr    guifg=#FFD75F ctermfg=221 gui=bold
+
+" 行號與分隔線
+highlight LineNr          guifg=#444444 ctermfg=238
+highlight VertSplit       guifg=#333333 guibg=NONE ctermfg=236 ctermbg=NONE
+
+" 視覺選取區塊（亮灰底）
+highlight Visual          guibg=#3A3A3A ctermbg=237
+
+" 搜尋結果（亮黃底黑字）
+highlight Search          guifg=#000000 guibg=#FFFF87 ctermfg=0 ctermbg=228
+
+" 配對括號（亮藍）
+highlight MatchParen      guifg=#00FFFF guibg=NONE gui=bold
+
+" ======= 額外舒適選項 =======
+set cursorline      " 高亮目前行
+" set number          " 顯示行號
+set showcmd         " 顯示輸入命令
+set ruler           " 顯示游標位置
+set noswapfile      " 關閉 swap 檔
+set paste           " 預設開啟 paste 模式
+
+" ===== 快捷開關 paste 模式 =====
+set pastetoggle=<F2>        " 按 F2 鍵即可開/關 paste 模式
+set showmode                " 在狀態列顯示目前模式
+
+" ===== 為 requirements.txt 啟用語法與顏色 =====
+augroup RequirementsHighlight
+  autocmd!
+  autocmd BufRead,BufNewFile requirements.txt setlocal filetype=conf
+  autocmd FileType conf syntax on
+  autocmd FileType conf setlocal background=dark termguicolors
+augroup END
+
+" ===== 為 .log 檔案啟用行號與顏色 =====
+augroup LogHighlight
+  autocmd!
+  " 偵測並設定 .log 類型
+  autocmd BufRead,BufNewFile *.log setlocal filetype=log
+  " 啟用語法高亮與行號
+  autocmd FileType log syntax on
+  autocmd FileType log setlocal number
+  autocmd FileType log setlocal background=dark termguicolors
+  " 自訂 log 關鍵字顏色
+  autocmd FileType log syntax match logError "ERROR"
+  autocmd FileType log syntax match logWarn  "WARN"
+  autocmd FileType log syntax match logWarn  "WARNING"
+  autocmd FileType log syntax match logInfo  "INFO"
+  autocmd FileType log syntax match logDebug "DEBUG"
+  autocmd FileType log syntax match logTrace "TRACE"
+  autocmd FileType log highlight logError ctermfg=Red guifg=#FF5F5F gui=bold
+  autocmd FileType log highlight logWarn  ctermfg=Yellow guifg=#FFD75F gui=bold
+  autocmd FileType log highlight logInfo  ctermfg=Cyan guifg=#87FFFF gui=bold
+  autocmd FileType log highlight logDebug ctermfg=Green guifg=#5FFF87 gui=bold
+  autocmd FileType log highlight logTrace ctermfg=Gray guifg=#AAAAAA
+augroup END
